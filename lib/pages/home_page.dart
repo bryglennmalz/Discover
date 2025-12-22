@@ -156,6 +156,15 @@ class _HomePageState extends State<HomePage> {
           padding: EdgeInsets.fromLTRB(10, 10, 30, 0),
           child: _authorInfoRow(context, index),
         ),
+        Padding(
+          padding: EdgeInsets.fromLTRB(
+            30,
+            MediaQuery.of(context).size.height * 0.05,
+            30,
+            0,
+          ),
+          child: _detailInfoRow(context, index),
+        ),
       ],
     );
   }
@@ -216,14 +225,64 @@ class _HomePageState extends State<HomePage> {
               size: 20,
             ),
             SizedBox(width: 10),
-            Icon(
-              Icons.bookmark_add_outlined, 
-              color: Colors.white, 
-              size: 20,
-            ),
+            Icon(Icons.bookmark_add_outlined, color: Colors.white, size: 20),
           ],
         ),
       ],
     );
   }
+
+  Widget _detailInfoRow(BuildContext context, int index) {
+    return Padding(
+      padding: EdgeInsets.fromLTRB(
+        0,
+        MediaQuery.of(context).size.height * 0,
+        0,
+        0,
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisSize: MainAxisSize.max,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          FloatingActionButton(
+            onPressed: () {},
+            backgroundColor: Colors.white,
+            shape: CircleBorder(),
+            child: Icon(Icons.play_arrow, color: Colors.redAccent, size: 30),
+          ),
+          SizedBox(width: 10),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: MediaQuery.of(context).size.width * 0.50,
+                child: Text(
+                  articles[index].title,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                  ),
+                  maxLines: 3,
+                ),
+              ),
+              Text(
+                articles[index].location,
+                style: TextStyle(
+                  color: Colors.white54,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w300,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  
 }
