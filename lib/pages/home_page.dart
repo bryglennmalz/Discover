@@ -115,31 +115,41 @@ class _HomePageState extends State<HomePage> {
       child: ListView.builder(
         itemCount: articles.length,
         itemBuilder: (contex, index) {
-          return Padding(
-            padding: EdgeInsets.only(
-              bottom: MediaQuery.of(context).size.height * 0.05,
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(40),
-              child: Container(
-                height: MediaQuery.of(context).size.height * 0.30,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    fit: BoxFit.cover,
-                    image: NetworkImage(articles[index].image),
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black38,
-                      spreadRadius: 1,
-                      blurRadius: 20,
-                      offset: Offset(0, 6),
-                    ),
-                  ],
+          return Stack(
+            fit: StackFit.loose,
+            children: [
+              Padding(
+                padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).size.height * 0.05,
                 ),
-                child: _articleInfoColumn(context, index),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(40),
+                  child: Container(
+                    height: MediaQuery.of(context).size.height * 0.30,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        fit: BoxFit.cover,
+                        image: NetworkImage(articles[index].image),
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black38,
+                          spreadRadius: 1,
+                          blurRadius: 20,
+                          offset: Offset(0, 6),
+                        ),
+                      ],
+                    ),
+                    child: _articleInfoColumn(context, index),
+                  ),
+                ),
               ),
-            ),
+              Positioned(
+                bottom: 30,
+                left: MediaQuery.of(context).size.width * 0.10,
+                child: _socialInfoContainer(context, index),
+              ),
+            ],
           );
         },
       ),
@@ -277,6 +287,7 @@ class _HomePageState extends State<HomePage> {
                   fontWeight: FontWeight.w300,
                 ),
               ),
+              Padding(padding: EdgeInsets.only(top: 3), child: _ratingWidget(context, index),)
             ],
           ),
         ],
@@ -284,5 +295,79 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  
+  Widget _ratingWidget(BuildContext context, int index) {
+    return Row(
+      children: List.generate(5, (_currentIndex) {
+        double _fillAmount = articles[index].rating - _currentIndex;
+        Icon _starIcon;
+
+        if (_fillAmount >= 1) {
+          _starIcon = Icon(Icons.star, color: Colors.amberAccent, size: 15);
+        } else if (_fillAmount >= 0.5) {
+          _starIcon = Icon(
+            Icons.star_half,
+            color: Colors.amberAccent,
+            size: 15,
+          );
+        } else {
+          _starIcon = Icon(
+            Icons.star_border,
+            color: Colors.amberAccent,
+            size: 15,
+          );
+        }
+
+        return _starIcon;
+      }),
+    );
+  }
+
+  Widget _socialInfoContainer(BuildContext context, int index) {
+    return Container(
+      height: MediaQuery.of(context).size.height * 0.08,
+      width: MediaQuery.of(context).size.width * 0.70,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      padding: EdgeInsets.all(10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Row(
+            children: [
+              Icon(Icons.thumb_up, color: Colors.redAccent),
+              SizedBox(width: 3),
+              Text(
+                articles[index].likes.toString(),
+                style: TextStyle(color: Colors.redAccent),
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              Icon(Icons.comment, color: Colors.grey),
+              SizedBox(width: 3),
+              Text(
+                articles[index].comments.toString(),
+                style: TextStyle(color: Colors.grey),
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              Icon(Icons.share, color: Colors.grey),
+              SizedBox(width: 3),
+              Text(
+                articles[index].shares.toString(),
+                style: TextStyle(color: Colors.grey),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
 }
